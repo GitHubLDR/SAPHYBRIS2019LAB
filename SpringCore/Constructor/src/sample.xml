@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans.xsd" 
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ xmlns="http://www.springframework.org/schema/beans">
+<bean class="com.spring.Sample" id="sample"/>
+<bean class="com.spring.Demo" id="demo">
+<constructor-arg index="0" value="100" name="str1"/>
+<constructor-arg index="1" value="Demo Constructor called" name="msg"/>
+</bean>
+</beans>
