@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	
+	<bean id="sample" class="newutil.Sample"></bean>
+	<bean id="demo" class="newutil.Demo">
+		<property name="thelist">
+<list>
+  <value>spring</value>
+   <value>666</value>
+   <value>180</value>
+  
+
+  </list>
+</property>
+
+<property name="theset">
+ 
+ <set>
+    
+    <value>string</value>
+    <value>160</value>
+    <value>200</value>
+    <ref bean ="sample"/>
+</set>
+</property>
+
+<property name="themap">
+<map>
+ <entry value="100" key="k1"/>
+ <entry key="k3" value-ref="sample"/>
+ <entry value-ref="sample" key-ref="sample"/>
+ </map>
+ </property>
+ 
+ <property name="prop">
+ <props>
+       <prop key="db.url">jdbc:mysql://Localhost:3306/twm63"</prop>
+       <prop key="db.driver">com.mysql.jdbc.Driver"</prop>
+
+</props>
+</property>
+</bean>
+</beans>
+
+
+
