@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+		
+		<bean id="sample" class="com.uhire.pkg.Sample"/>
+		<bean id="demo" class="com.uhire.util.Demo" p:theList-ref="l" p:theSet-ref="s" p:theMap-ref="m" p:theProperties-ref="prop"/>
+		<bean id="demo1" class="com.uhire.util.Demo1" p:theList-ref="l"/>
+		
+		<util:list id="l">
+				<value>SPRING</value>
+				<value>100</value>
+				<value>100</value>
+				<ref bean="sample"/>
+		</util:list>
+		<util:set id="s">
+				<value>SPRING</value>
+				<value>100</value>
+				<value>100</value>
+				<ref bean="sample"/>
+		</util:set>
+		<util:map id="m">
+				<entry key="K1" value="100"/>
+				<entry key="K2" value-ref="sample"/>
+				<entry key-ref="sample" value-ref="sample"/>
+		</util:map>
+		
+		<util:properties id="prop">
+			<prop key="db.url">jdbc:mysql://localhost:3306/twm63</prop>
+			<prop key="db.driver">com.mysql.jdbc.Driver</prop>
+		</util:properties>
+</beans>
