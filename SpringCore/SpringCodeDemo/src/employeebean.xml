@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="adrs" class="co.technocraft.Address">
+	  <property name="city" value="Bengaluru"/>
+	  <property name="state" value="Karnataka"/>
+	  <property name="zipcode" value="560100"/>
+	</bean>
+	
+	<bean id="emp1" class="co.technocraft.Employee">
+	  <property name="eid" value="102"/>
+	  <property name="ename" value="Raj"/>
+	  <constructor-arg ref = "adrs"/>	
+	  <property name="address" ref="adrs"/>
+	</bean>
+	
+	<bean id="emp2" class="co.technocraft.Employee">
+	  <property name="eid" value="103"/>
+	  <property name="ename" value="Sekar"/>
+	  <property name="address" ref="adrs"/>
+	</bean>
+</beans>
