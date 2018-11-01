@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="items.xsd">
+
+
+<!-- Collectiontype  -->
+<collectiontypes>
+	<collectiontype elementtype="java.lang.String" code="hobbiesStringCollection" type="set"/>
+</collectiontypes>
+
+
+<!-- Enumtype and adding value to existing table -->
+	<enumtypes>
+		<enumtype code="StudentType" autocreate="true" generate="true" dynamic="true">
+			<value code="REGULAR" />
+			<value code="DISTANCE"></value>
+		</enumtype>
+		<enumtype code="Orderstatus" autocreate="false" generate="true" dynamic="true">
+		<value code="MANUAL_HOLD"></value>
+		<value code="ORDER_PACK"></value>
+		</enumtype>
+	</enumtypes>
+	
+	
+	<!--   Map  Type -->
+	
+	<maptypes>
+	
+	<maptype argumenttype="java.util.Date" returntype="java.lang.String" code="feedBack" autocreate="true"/>
+	
+	</maptypes>
+	
+	
+
+<!-- Relation tag to many to many -->	
+<relations> 
+	
+	<relation localized="true" code="Student2CourseRel" autocreate="true" generate="true">
+
+	<deployment table="student2courserel" typecode="10003"/>
+	
+	<sourceElement type="Student" collectiontype="set" cardinality="many" qualifier="students" ordered="true">
+	</sourceElement>
+	
+	<targetElement type="Course" collectiontype="set" cardinality="many" qualifier="subcourse" ordered="false">
+	</targetElement>
+	</relation>
+
+
+<!-- one to many -->
+
+<relation localized="false" code="Student2LibraryCardRel" autocreate="true" generate="true">
+
+<sourceElement type="Student" cardinality="one" qualifier="student" ordered="false">
+
+</sourceElement>
+
+<targetElement type="LibraryCard" collectiontype="set" cardinality="many" qualifier="librarycards" ordered="true"></targetElement>
+</relation>
+</relations>
+
+
+
+
+<!-- Creating student table -->
+
+
+<itemtypes>
+
+		<itemtype code="Student" autocreate="true" generate="true">
+			<deployment table="student" typecode="10002" />
+			
+			<attributes>
+				
+				<attribute type="java.lang.String" qualifier="name">
+					<persistence type="property"></persistence>
+				</attribute>
+
+				<attribute type="java.lang.String" qualifier="id">
+					<persistence type="property"></persistence>
+				</attribute>
+				
+				<attribute type="java.lang.String" qualifier="city">
+					<persistence type="property"></persistence>
+				</attribute>
+				
+				<attribute type="java.lang.String" qualifier="course">
+					<persistence type="property"></persistence>
+				</attribute>
+				
+				<attribute type="StudentType" qualifier="studentType">
+					<persistence type="property"></persistence>
+				</attribute>
+			
+				<attribute type="OrderStatus" qualifier="orderStatus">
+					<persistence type="property"></persistence>
+				</attribute>
+				
+				<attribute type="hobbiesStringCollection" qualifier="hobbies">
+					<persistence type="property"></persistence>
+				</attribute>
+				
+				<attribute type="feedBack" qualifier="feedBack">
+				
+				<persistence type="property"></persistence>
+				</attribute>
+			
+				
+			</attributes>
+		</itemtype>
+<!-- Creating Course table -->
+		
+<itemtype code="Course" autocreate="true" generate="true">
+<deployment table="course" typecode="10005"/>
+	<attributes>
+		<attribute type="java.lang.String" qualifier="subcourse">
+			<persistence type="property"></persistence>
+		</attribute>
+	</attributes>
+</itemtype>
+
+
+
+		
+<itemtype code="LibraryCard">
+
+<deployment table="librarycard" typecode="10009"/>
+<attributes>
+<attribute type="java.lang.String" qualifier="uid">
+
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="java.util.Date" qualifier="dateofIssue">
+<persistence type="property"></persistence>
+</attribute>
+</attributes>
+
+</itemtype>
+	<itemtype code="Car" extends="product" autocreate="true"
+			generate="true">
+			<attributes>
+				<attribute type="java.lang.Integer" qualifier="hp">
+					<description>horse power</description>
+					<persistence type="property"></persistence>
+				</attribute>
+			</attributes>
+
+
+		</itemtype>
+
+	<itemtype code="Product" autocreate="false" generate="true">
+
+			<attributes>
+				<attribute type="java.lang.String" qualifier="colors">
+					<persistence type="property"></persistence>
+				</attribute>
+			</attributes>
+	</itemtype>
+		
+</itemtypes>
+
+
+	
+	<!--  <relation code="CategoryProductRelation" autocreate="true" generate="true" localized="false">
+ 		<deployment table="cat2ProdRel" typecode="12345"/>
+ 		
+ 		<sourceElement qualifier="supercategories" type="Category" cardinality="many" ordered="false">
+  			<description>Super Categories</description>
+  			<modifiers read="true" write="true" search="true" optional="true"></modifiers>
+ 		</sourceElement> 
+ 
+ 		<targetElement qualifier="products" type="Product" cardinality="many" collectiontype="list" ordered="true">
+ 			<description>Products</description>
+ 			<modifiers read="true" write="true" search="true" optional="true"/>
+ 		</targetElement>
+ 
+ </relation>
+-->
+
+
+
+
+
+
+
+
+</items>
