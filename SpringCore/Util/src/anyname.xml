@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd">
+		<bean id="sample" class="com.uhire.pkg.Sample"/>
+		<bean id="demo" class="com.uhire.util.Demo">
+		
+		<!-- configuring the list -->
+		<property name="theList">
+			<list>
+				<value>SPRING</value>
+				<value>100</value>
+				<value>100</value>
+				<ref bean="sample"/>
+			</list>
+		</property>
+		
+		<!-- configuring the Set -->
+		<property name="theSet">
+		<set>
+		      <value>SPRING</value>
+		      <value>100</value>
+		      <value>200</value>
+		      <value>200</value>
+		      <ref bean="sample"/>
+		</set>
+		</property>
+		
+		<!--  configure the Map -->
+		<property name="theMap">
+		<map>
+		     <entry key="k1" value="100"/>
+		     <entry key="k2" value-ref="sample"/>
+		     <entry key-ref="sample" value-ref="sample"/>
+		     </map>
+		</property>
+		
+		<!-- configure the Properties -->
+		<property name="theProperties">
+		<props>
+		  <prop key="db.url">jdbc:mysql://LocalHost:3306/twm63</prop>
+		  <prop key="db.driver">com.mysql.jdbc.Driver</prop>
+		</props>
+		</property>
+		</bean>
+</beans>

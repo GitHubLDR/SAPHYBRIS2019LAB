@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- [y] hybris Platform Copyright (c) 2017 SAP SE or an SAP affiliate company. 
+	All rights reserved. This software is the confidential and proprietary information 
+	of SAP ("Confidential Information"). You shall not disclose such Confidential 
+	Information and shall use it only in accordance with the terms of the license 
+	agreement you entered into with SAP. -->
+<!-- ATTENTION: This is just an example file. You have to edit it according 
+	to your needs. -->
+
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="items.xsd">
+	<collectiontypes>
+		<collectiontype elementtype="java.lang.String" code="hobbiesStringCollection"
+			type="set"/>
+	</collectiontypes>
+	<enumtypes>
+		<enumtype code="StudentType" autocreate="true" generate="true"
+			dynamic="true">
+			<value code="REGULAR" />
+			<value code="DISTANCE" />
+		</enumtype>
+		
+	</enumtypes>
+	<maptypes>
+		<maptype argumenttype="java.util.Date" returntype="java.lang.String"
+			code="feedBack" autocreate="true" />
+	</maptypes>
+	<relations>
+		<relation localized="false" code="Student2CourseRel"
+			autocreate="true" generate="true">
+			<sourceElement type="Student" cardinality="one"
+				qualifier="student" ordered="false">
+			</sourceElement>
+			<targetElement type="Course" collectiontype="set"
+				cardinality="many" qualifier="courses" ordered="true">
+			</targetElement>
+		</relation>
+	</relations>
+	<itemtypes>
+		<itemtype code="Student" autocreate="true" generate="true">
+			<deployment table="student" typecode="10001" />
+			<attributes>
+				<attribute type="java.lang.String" qualifier="id">
+					<persistence type="property" />
+				</attribute>
+				<attribute type="java.lang.String" qualifier="name">
+					<persistence type="property" />
+				</attribute>
+				<attribute type="java.lang.String" qualifier="course">
+					<persistence type="property" />
+				</attribute>
+				<attribute type="StudentType" qualifier="studentType">
+					<persistence type="property" />
+				</attribute>
+				<attribute type="hobbiesStringCollection" qualifier="hobbies">
+					<persistence type="property" />
+				</attribute>
+				<attribute type="feedBack" qualifier="feedback">
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+		<itemtype code="Course" autocreate="true" generate="true">
+			<deployment table="course" typecode="10005" />
+			<attributes>
+				<attribute type="java.lang.String" qualifier="uid">
+					<persistence type="property" />
+				</attribute>
+				<attribute type="java.util.Date" qualifier="dateOfIssue">
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+	</itemtypes>
+</items>
+
+
+
+
+ 
