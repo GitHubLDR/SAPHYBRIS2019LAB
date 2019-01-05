@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<!--
+	ATTENTION: This is just an example file. You have to edit it according to your needs.
+-->
+
+<items 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:noNamespaceSchemaLocation="items.xsd">
+			
+	
+	
+			
+
+<collectiontypes>
+<collectiontype elementtype="java.lang.String" code="Hobby" autocreate="true" generate="true" type="list"/>
+</collectiontypes>
+
+
+<enumtypes>
+<enumtype code="Genders" autocreate="true" generate="true" dynamic="true">
+<value code="MALE"></value>
+<value code="FEMALE"></value>
+<value code="OTHER"></value>
+</enumtype>
+</enumtypes>
+
+<maptypes>
+<maptype argumenttype="java.util.Date" returntype="java.lang.String" code="Feedback" autocreate="true" generate="true"/>
+</maptypes>
+
+<relations>
+
+<relation localized="true" code="Student2CourseRel" autocreate="true" generate="true">
+<deployment table="student2courserel" typecode="10003"/>
+<sourceElement type="Student" cardinality="many" collectiontype="list" qualifier="students">
+</sourceElement>
+<targetElement type="Courses" cardinality="many" collectiontype="list" qualifier="courses">
+</targetElement>
+</relation>
+
+
+
+</relations>
+
+
+
+<itemtypes>
+<itemtype code="Student" autocreate="true" generate="true">
+<deployment table="student" typecode="10001"/>
+<attributes>
+<attribute type="localized:java.lang.String" qualifier="id">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="localized:java.lang.String" qualifier="name">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="localized:java.lang.String" qualifier="email">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="localized:java.lang.String" qualifier="phoneNumber">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="Genders" qualifier="gender">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="Feedback" qualifier="feedback">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="Hobby" qualifier="hobbies">
+<persistence type="property"></persistence>
+</attribute>
+</attributes>
+</itemtype>
+
+
+
+<itemtype code="Courses" autocreate="true" generate="true">
+<deployment table="courses" typecode="10002"/>
+<attributes>
+<attribute type="localized:java.lang.String" qualifier="courseName">
+<persistence type="property"></persistence>
+</attribute>
+<attribute type="localized:java.lang.String" qualifier="fee">
+<persistence type="property"></persistence>
+</attribute>
+</attributes>
+</itemtype>
+
+</itemtypes>
+
+
+	
+</items>

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+		
+	<context:annotation-config/> 
+
+	<alias alias="simpleSuggestionFacade" name="defaultSimpleSuggestionFacade"/>
+	<bean id="defaultSimpleSuggestionFacade" class="org.harish.facades.suggestion.impl.DefaultSimpleSuggestionFacade" >
+		<property name="simpleSuggestionService" ref="simpleSuggestionService"/>
+		<property name="userService" ref="userService"/>
+		<property name="categoryService" ref="categoryService"/>
+		<property name="productService" ref="productService"/>
+		<property name="productConverter" ref="carouselProductConverter"/>
+		<property name="cartService" ref="cartService"/>
+	</bean>
+	
+	<bean id="carouselProductConverter" parent="defaultProductConverter">
+		<property name="populators">
+			<list merge="true">
+				<ref bean="productPricePopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="acceleratorVariantOptionDataConverter" alias="variantOptionDataConverter"/> 
+	<bean id="acceleratorVariantOptionDataConverter" parent="abstractPopulatingConverter">
+		<lookup-method name="createTarget" bean="variantOptionData"/>
+		<property name="populators">
+			<list>
+				<ref bean="acceleratorVariantOptionDataPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="defaultAcceleratorVariantOptionDataPopulator" alias="acceleratorVariantOptionDataPopulator"/>
+	<bean id="defaultAcceleratorVariantOptionDataPopulator"  class="org.harish.facades.populators.AcceleratorVariantOptionDataPopulator"
+	      parent="variantOptionDataPopulator" >
+		<property name="mediaService" ref="mediaService"/>
+		<property name="mediaContainerService" ref="mediaContainerService"/>
+		<property name="typeService" ref="typeService"/>
+		<property name="imageFormatMapping" ref="imageFormatMapping"/>
+		<property name="variantAttributeMapping">
+			<map>
+				<entry key="ApparelStyleVariantProduct.style" value="styleSwatch"/>
+			</map>
+		</property>
+	</bean>
+
+
+	<alias name="acceleratorGenderConverter" alias="genderConverter"/> 
+	<bean id="acceleratorGenderConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="org.harish.facades.product.data.GenderData"/>
+			<property name="populators">
+				<list>
+					<ref bean="genderDataPopulator"/>
+				</list>
+			</property>
+	</bean>
+
+	<alias name="defaultGenderDataPopulator" alias="genderDataPopulator"/>
+	<bean id="defaultGenderDataPopulator" class="org.harish.facades.populators.GenderDataPopulator" >
+		<property name="typeService" ref="typeService"/>
+	</bean>
+
+	<bean id="apparelProductPopulator" class="org.harish.facades.populators.ApparelProductPopulator" >
+		<property name="genderConverter" ref="genderConverter"/>
+	</bean>
+	
+	<bean id="harishStyleVariantPopulator" class="org.harish.facades.populators.HarishStyleVariantPopulator" parent="defaultProductBasicPopulator" >
+		
+	</bean>
+	
+	
+
+	<!-- Add the apparelProductPopulator to the productConverter -->
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="productConverter"/>
+		<property name="add" ref="apparelProductPopulator"/>
+	</bean>
+	
+	
+		<bean parent="modifyPopulatorList">
+		<property name="list" ref="productConverter"/>
+		<property name="add" ref="harishStyleVariantPopulator"/>
+	</bean>
+	
+
+
+	<!-- accelerator Image Format Mappings -->
+	<alias name="acceleratorImageFormatMapping" alias="imageFormatMapping"/>
+	<bean id="acceleratorImageFormatMapping" parent="defaultImageFormatMapping">
+		<property name="mapping">
+			<map>
+				<entry key="superZoom" value="1200Wx1200H"/>
+				<entry key="zoom" value="515Wx515H"/>
+				<entry key="store" value="365Wx246H"/>
+				<entry key="product" value="300Wx300H"/>
+				<entry key="thumbnail" value="96Wx96H"/>
+				<entry key="cartIcon" value="65Wx65H"/>
+				<entry key="styleSwatch" value="30Wx30H"/>
+			</map>
+		</property>
+	</bean>
+
+	<alias name="acceleratorProductPrimaryImagePopulator" alias="productPrimaryImagePopulator" />
+	<bean id="acceleratorProductPrimaryImagePopulator" parent="defaultProductPrimaryImagePopulator">
+		<property name="imageFormats">
+			<list>
+				<value>zoom</value>
+				<value>product</value>
+				<value>thumbnail</value>
+				<value>cartIcon</value>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="acceleratorProductGalleryImagesPopulator" alias="productGalleryImagesPopulator" />
+	<bean id="acceleratorProductGalleryImagesPopulator" parent="defaultProductGalleryImagesPopulator">
+		<property name="imageFormats">
+			<list>
+				<value>superZoom</value>
+				<value>zoom</value>
+				<value>product</value>
+				<value>thumbnail</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="customerEmailContext" class="org.harish.facades.process.email.context.CustomerEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="customerConverter" ref="customerConverter"/>
+	</bean>
+
+	<bean id="forgottenPasswordEmailContext" class="org.harish.facades.process.email.context.ForgottenPasswordEmailContext" parent="customerEmailContext" scope="prototype" >
+		<property name="customerConverter" ref="customerConverter"/>
+	</bean>
+
+	<bean id="orderNotificationEmailContext" class="org.harish.facades.process.email.context.OrderNotificationEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="orderConverter" ref="orderConverter"/>
+	</bean>
+
+	<bean id="quoteNotificationEmailContext" class="org.harish.facades.process.email.context.QuoteNotificationEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="quoteService" ref="quoteService"/>
+		<property name="quoteConverter" ref="quoteConverter"/>
+	</bean>
+	
+	<bean id="deliverySentEmailContext" class="org.harish.facades.process.email.context.DeliverySentEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="consignmentConverter" ref="consignmentConverter"/>
+	</bean>
+	
+	<bean id="readyForPickupEmailContext" class="org.harish.facades.process.email.context.ReadyForPickupEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="consignmentConverter" ref="consignmentConverter"/>
+	</bean>
+	
+	<bean id="orderCancelledEmailContext" class="org.harish.facades.process.email.context.OrderCancelledEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="orderConverter" ref="orderConverter"/>
+	</bean>
+	
+	<bean id="orderRefundEmailContext" class="org.harish.facades.process.email.context.OrderRefundEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="orderConverter" ref="orderConverter"/>
+	</bean>
+	<bean id="consignmentCollectionReminderEmailContext" class="org.harish.facades.process.email.context.ConsignmentCollectionReminderEmailContext" parent="abstractEmailContext" scope="prototype">
+        <property name="consignmentConverter" ref="consignmentConverter"/>
+        <property name="formatFactory" ref="formatFactory"/>
+        <property name="customerServiceUncollectedConsignmentStrategy" ref="customerServiceUncollectedConsignmentStrategy" />
+        <property name="orderConverter" ref="orderConverter"/>
+    </bean>
+
+	<bean id="orderPartiallyModifiedEmailContext" class="org.harish.facades.process.email.context.OrderPartiallyModifiedEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="orderConverter" ref="orderConverter"/>
+		<property name="orderEntryConverter" ref="orderEntryConverter"/>
+		<property name="priceDataFactory" ref="priceDataFactory"/>		
+	</bean>
+
+	<bean id="orderPartiallyCanceledEmailContext" class="org.harish.facades.process.email.context.OrderPartiallyCanceledEmailContext" parent="orderPartiallyModifiedEmailContext" scope="prototype" >
+	</bean>
+
+	<bean id="orderPartiallyRefundedEmailContext" class="org.harish.facades.process.email.context.OrderPartiallyRefundedEmailContext" parent="orderPartiallyModifiedEmailContext" scope="prototype" >
+	</bean>
+
+	<bean id="notPickedUpConsignmentCanceledEmailContext" class="org.harish.facades.process.email.context.NotPickedUpConsignmentCanceledEmailContext" parent="abstractEmailContext" scope="prototype" >
+		<property name="consignmentConverter" ref="consignmentConverter"/>
+		<property name="priceDataFactory" ref="priceDataFactory"/>
+	</bean>
+
+	<alias name="yacceleratorSearchPagePointOfServiceDistancePopulator" alias="searchPagePointOfServiceDistancePopulator" />
+	<bean id="yacceleratorSearchPagePointOfServiceDistancePopulator" class="org.harish.facades.storefinder.populators.SearchPagePointOfServiceDistancePopulator" >
+		<property name="pointOfServiceDistanceConverter" ref="pointOfServiceDistanceConverter"/>
+	</bean>
+
+	<bean id="genderData" class="org.harish.facades.product.data.GenderData" scope="prototype"/>
+	<bean id="studentDataPopuator" class="org.harish.facades.populators.StudentDataPopulator"></bean>
+	<bean id="studentRegPopulator" class="org.harish.facades.populators.StudentRegPopulator">
+	<property name="commerceCommonI18NService" ref="commerceCommonI18NService"></property>
+	</bean>
+	
+	<bean id="studentConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass"  value="de.hybris.platform.commercefacades.product.data.StudentData"></property>
+		<property name="populators">
+			<list>
+				<ref bean="studentDataPopuator"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="studentRegConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="org.training.model.StudentModel"></property>
+		<property name="populators">
+			<list>
+				<ref bean="studentRegPopulator"/>
+			</list>
+		</property>
+	</bean>
+	
+	<alias name="customerPopulator1" alias="myPopulator"/>
+	<bean id="customerPopulator1" class="org.harish.facades.populators.CustomerPopulator"></bean>
+	<bean id="customerRegPopulator" class="org.harish.facades.populators.CustomerRegPopulator">
+		<property name="commerceCommonI18NService" ref="commerceCommonI18NService"></property>
+	
+	</bean>
+	
+	
+	
+	<alias name="customerConverter1" alias="mycustomerConverter"/>
+		<bean id="customerConverter1" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.product.data.StudentData"/>
+			<property name="populators">
+				<list>
+					<ref bean="myPopulator"/>
+				</list>
+			</property>
+	      </bean>
+	      
+	      	<bean id="customerRegConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="org.training.model.StudentModel"/>
+			<property name="populators">
+				<list>
+					<ref bean="customerRegPopulator"/>
+				</list>
+			</property>
+	      </bean>
+	
+	
+	<bean id="myCustomPopulator" class="org.harish.facades.populators.MyCustomPopulator"></bean>
+	
+	
+	<bean id="studentFacade" class="org.harish.facades.student.StudentFacadeImpl">
+	<property name="studentConverter" ref="studentConverter"></property>
+	<property name="studentRegConverter" ref="studentRegConverter"></property>
+	<property name="studentService" ref="studentService"></property>
+	</bean>
+	
+	
+	
+	<bean id="customerFacade1" class="org.harish.facades.student.CustomerFacadeImpl">
+	<property name="customerService" ref="customerService"></property>
+	<property name="mycustomerConverter" ref="mycustomerConverter"></property>
+	<property name="customerRegConverter" ref="customerRegConverter"></property>
+	
+	
+	</bean>
+	
+    <bean id="studentEmailContext" class="org.harish.facades.process.email.context.StudentEmailContext" parent="abstractEmailContext" scope="prototype"></bean>
+	
+	<alias name="harisProductBasicPopulator" alias="productBasicPopulator"/>
+	<bean id="harisProductBasicPopulator" class="org.harish.facades.populators.HarisProductBasicPopulator" parent="defaultProductBasicPopulator">
+	
+	</bean>
+	
+	
+		<alias name="newCustomerPopulator" alias="customerPopulator"/>
+	<bean id="newCustomerPopulator" class="org.harish.facades.populators.NewCustomerPopulator" parent="defaultCustomerPopulator"></bean>
+	
+	
+	
+</beans>
