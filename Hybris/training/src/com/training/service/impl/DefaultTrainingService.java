@@ -55,6 +55,7 @@ public class DefaultTrainingService implements TrainingService
 		final CatalogUnawareMediaModel media = existingLogo.isPresent() ? existingLogo.get()
 				: modelService.create(CatalogUnawareMediaModel.class);
 		media.setCode(logoCode);
+		System.out.println("chumma");
 		media.setRealFileName("sap-hybris-platform.png");
 		modelService.save(media);
 
